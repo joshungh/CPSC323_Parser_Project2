@@ -1,0 +1,16 @@
+program
+	int myinteger;
+	real foo , bar;
+  begin
+	foo := 1 ;
+	bar := 2 ;
+	while ( foo <> 10 )
+	  begin 
+		foo := foo + 1 ;
+		bar := ( bar * foo ) / 2 ;
+	  end
+	if ( bar > 100 ) 
+	  begin
+		write( 1 , 3 , 3.5 , 7 ) ;
+	  end
+  end.
