@@ -8,13 +8,14 @@ Adam Weesner
 CPSC 323 Fall 2018
 Shohrat Geldiyev
 
-/*********************************************
+*********************************************
 Writing a parser using the Lexer Analyzer.
 The parser will analyze the syntax written.
 *********************************************/
 
 #include <iostream>
 #include <fstream>
+#include <stdlib.h>
 #include "Parser.h"
 
 using namespace std;
