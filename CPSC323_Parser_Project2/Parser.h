@@ -14,7 +14,7 @@ Writing a parser using the Lexer Analyzer.
 The parser will analyze the syntax written.
 *********************************************/
 
-#ifndef PARSER_H 
+#ifndef PARSER_H
 #define PARSER_H
 
 #include "Lexer.h"
@@ -53,9 +53,9 @@ void Return(ifstream&, TokenType&);
 
  // Top down Parser - sets grammer rules from file
 void Parser(ifstream &file) {
-	
-	TokenType curToken = lexer(file);
 
+	TokenType curToken = lexer(file);
+	cout << "\n" << curToken.token << "\t" << curToken.lexeme << endl;
 	// Checking program
 	program(file, curToken);
 
@@ -86,14 +86,14 @@ void expect(string s, TokenType& check, ifstream &file) {
 
 // Program Function
 void program(ifstream& file, TokenType& token) {
-	
+
 	expect("program", token, file);
 
-	
+
 	if (token.token.compare("Type") == 0) {
 		decList(file, token);
 	}
-	
+
 	if (token.lexeme.compare("function") == 0) {
 		functionList(file, token);
 	}
@@ -111,17 +111,17 @@ void program(ifstream& file, TokenType& token) {
 
 	// Registers token if presented
 	expect(".", token, file);
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "Program => program [decList] [functionList] begin [statementList] end." << endl;
 }
 // Declist Function
 void decList(ifstream& file, TokenType& token) {
 
-	// Check for initial declaration 
+	// Check for initial declaration
 	do {
 		dec(file, token);
 	} while (token.token.compare("Type") == 0);
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "decList => dec {dec}" << endl;
 }
 
@@ -136,17 +136,17 @@ void dec(ifstream& file, TokenType& token) {
 
 	// Registers token if presented
 	expect(";", token, file);
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "dec => Type varList ;" << endl;
 }
 
 // FunctionList function
 void functionList(ifstream& file, TokenType& token) {
-	// Check for initial function 
+	// Check for initial function
 	do {
 		function(file, token);
 	} while (token.lexeme.compare("function") == 0);
-	
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "functionList =>function {function}" << endl;
 }
 
@@ -184,6 +184,7 @@ void function(ifstream& file, TokenType& token) {
 		statementList(file, token);
 	}
 	expect("end", token, file);
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "function => function Ident ( [parameterList] ): Type ; [decList] begin [statementList] end " << endl;
 }
 
@@ -192,13 +193,14 @@ void parameterList(ifstream& file, TokenType& token) {
 	// Call Parameter function
 	parameter(file, token);
 
-	// If a comma is detected, add another parameter 
+	// If a comma is detected, add another parameter
 	while (token.lexeme.compare(",") == 0) {
 		// registers token if presented
 		expect(",", token, file);
 		// call the parameter function
 		parameter(file, token);
 	}
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "parameterList => parameter {, parameter}" << endl;
 }
 
@@ -212,7 +214,7 @@ void parameter(ifstream& file, TokenType& token) {
 	{
 		token = lexer(file);
 	}
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "parameter => Type Ident" << endl;
 }
 
@@ -223,7 +225,7 @@ void type(ifstream& file, TokenType& token) {
 	{
 		//  Registers token if presented
 		token = lexer(file);
-		
+		cout << "\n" << token.token << "\t" << token.lexeme << endl;
 		cout << "Type => int | real | string" << endl;
 	}
 }
@@ -240,13 +242,13 @@ void varList(ifstream& file, TokenType& token) {
 	while (token.lexeme.compare(",") == 0) {
 		//  Registers token if presented
 		token = lexer(file);
-	
+
 		if (token.token.compare("Identifier") == 0)
 		{
 			token = lexer(file);
 		}
 	}
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "varList => Ident {,Ident}" << endl;
 }
 
@@ -259,13 +261,14 @@ void statementList(ifstream& file, TokenType& token) {
 	while (token.token.compare("Identifier") == 0 || token.lexeme.compare("read") == 0 || token.lexeme.compare("write") == 0 || token.lexeme.compare("if") == 0 || token.lexeme.compare("while") == 0 || token.lexeme.compare("do") == 0 || token.lexeme.compare("return") == 0) {
 		statement(file, token);
 	}
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "statementList => statement{statement}" << endl;
 }
 
 // Statement Function
 void statement(ifstream& file, TokenType& token) {
 	//  Registers token if presented
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	if (token.token.compare("Identifier") == 0)
 	{	// Assign function is called and statement is read
 		assign(file, token);
@@ -314,6 +317,7 @@ void statement(ifstream& file, TokenType& token) {
 // Assign Function
 void assign(ifstream& file, TokenType& token) {
 	// Registers token if presented
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	if (token.token.compare("Identifier") == 0)
 	{
 		token = lexer(file);
@@ -338,12 +342,12 @@ void read(ifstream& file, TokenType& token) {
 
 	expect(")", token, file);
 	expect(";", token, file);
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "Read => read ( varList ) ; " << endl;
 }
 // Write Function
 void write(ifstream& file, TokenType& token) {
-	
+
 	expect("write", token, file);
 
 	expect("(", token, file);
@@ -359,7 +363,7 @@ void write(ifstream& file, TokenType& token) {
 
 	expect(")", token, file);
 	expect(";", token, file);
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "Write => write ( expression {, expression} ) ;" << endl;
 }
 
@@ -407,7 +411,7 @@ void If(ifstream& file, TokenType& token) {
 		statementList(file, token);
 		expect("end", token, file);
 	}
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "If => if ( condition ) begin statementList end { elsif ( condition ) begin statementList end } [else begin statementList end ]" << endl;
 }
 
@@ -433,7 +437,7 @@ void While(ifstream& file, TokenType& token) {
 	}
 
 	expect("end", token, file);
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "While => while ( condition ) begin [statmentList] end" << endl;
 }
 // Do Function
@@ -457,19 +461,19 @@ void Do(ifstream& file, TokenType& token) {
 	expect(")", token, file);
 
 	expect(";", token, file);
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "do => do [statementList] until ( condition) ;" << endl;
 }
 // Return Function
 void Return(ifstream& file, TokenType& token) {
 	// Registers token if presented
-	expect("return", token, file); 
+	expect("return", token, file);
 
 	// Expression function is called
 	expression(file, token);
 
 	expect(";", token, file);
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "Return => return expression ;" << endl;
 }
 
@@ -484,7 +488,7 @@ void condition(ifstream& file, TokenType& token) {
 
 	// Expression function is called
 	expression(file, token);
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "condition => expression RelOp expression" << endl;
 }
 
@@ -514,7 +518,7 @@ void expression(ifstream& file, TokenType& token) {
 		// Term Function is called
 		term(file, token);
 	}
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "expression => Term { (+|-) Term }" << endl;
 }
 
@@ -532,13 +536,13 @@ void term(ifstream& file, TokenType& token) {
 		// Call itself
 		factor(file, token);
 	}
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "Term => Factor { (*|/) Factor } " << endl;
 }
 
 // Factor Function
 void factor(ifstream& file, TokenType& token) {
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	//Check if identifier, intConst, realConst, strConst
 	if (token.token.compare("Identifier") == 0)
 	{
@@ -554,7 +558,7 @@ void factor(ifstream& file, TokenType& token) {
 		}
 
 		else {
-		
+
 			cout << "Factor => Ident" << endl;
 		}
 	}
@@ -591,7 +595,7 @@ void factor(ifstream& file, TokenType& token) {
 
 // FunctionCall Function
 void functionCall(ifstream& file, TokenType& token) {
-	
+
 	expect("(", token, file);
 
 	// Check if there is an ArgList
@@ -601,7 +605,7 @@ void functionCall(ifstream& file, TokenType& token) {
 	}
 
 	expect(")", token, file);
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "functionCall => Ident ( [ArgList] ) " << endl;
 }
 
@@ -618,7 +622,7 @@ void ArgList(ifstream& file, TokenType& token) {
 		// Expression Function is called
 		expression(file, token);
 	}
-
+	cout << "\n" << token.token << "\t" << token.lexeme << endl;
 	cout << "ArgList => Expr { ,Expr} " << endl;
 }
 
